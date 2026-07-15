@@ -8,7 +8,7 @@
         <h5 class="mb-0">Editar producto</h5>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('products.update', $product) }}">
+        <form method="POST" action="{{ route('products.update', $product) }}" class="needs-validation" novalidate>
             @csrf
             @method('PUT')
             @include('products.form')

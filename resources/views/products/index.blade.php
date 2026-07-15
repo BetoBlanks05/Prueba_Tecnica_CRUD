@@ -30,7 +30,7 @@
                         <th class="text-end">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="productTableBody">
                     @forelse ($products as $product)
                         <tr>
                             <td>{{ $product->name }}</td>
@@ -71,4 +71,42 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchForm = document.querySelector('form[action="{{ route('products.index') }}"]');
+        const paginationLinks = document.querySelectorAll('.pagination a');
+        const tableBody = document.getElementById('productTableBody');
+
+        const showSkeleton = () => {
+            if (!tableBody) return;
+            const skeletonRows = Array(5).fill(0).map(() => `
+                <tr>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton"></div></td>
+                    <td><div class="skeleton" style="width: 80%;"></div></td>
+                    <td><div class="skeleton" style="width: 50%;"></div></td>
+                    <td class="text-end">
+                        <div class="skeleton d-inline-block rounded" style="width: 35px; height: 31px;"></div>
+                        <div class="skeleton d-inline-block rounded mx-1" style="width: 50px; height: 31px;"></div>
+                        <div class="skeleton d-inline-block rounded" style="width: 65px; height: 31px;"></div>
+                    </td>
+                </tr>
+            `).join('');
+            tableBody.innerHTML = skeletonRows;
+        };
+
+        if (searchForm) {
+            searchForm.addEventListener('submit', showSkeleton);
+        }
+
+        if (paginationLinks) {
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', showSkeleton);
+            });
+        }
+    });
+</script>
 @endsection
